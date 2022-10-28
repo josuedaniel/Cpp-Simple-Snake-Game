@@ -2,6 +2,7 @@
 // Josue Martinez
 
 #include <iostream>
+#include <conio.h>
 using namespace std;
 bool gameOver;
 
@@ -56,35 +57,86 @@ void Draw() {
     for (int i = 0; i < height; i++) {
         
         // For each space in the width
-        for (int j = 0; j < width+1 ; j++) {
+        for (int j = 0; j < width; j++) {
             
             // if j is the first field
             if (j == 0)
                 cout << "#";
+            if (i == y && j == x)
+                cout << "O";
+            else if (i == fruitY && j == fruitX)
+                cout << "F";
             else
                 cout << " ";
             
-            if (j == width)
+            if (j == width-1)
                 cout << "#";
         }
 
         cout << endl;
+        
     }
 
     //display the bottom border of the map
     for (int i = 0; i < width + 2; i++)
         cout << "#";
     cout << endl;
+    cout << "Score: " << score << endl;
 
 }
 
 void Input() {
-
+    if (_kbhit())
+    {
+        switch (_getch())
+        {
+        case 'a':
+            dir = LEFT;
+            break;
+        case 'd':
+            dir = RIGHT;
+            break;
+        case 'w':
+            dir = UP;
+            break;
+        case 's':
+            dir = DOWN;
+            break;
+        case 'x':
+            gameOver = true;
+            break;
+        
+        }
+    }
 }
 
 void Logic() {
-
-}
+    switch (dir)
+    {
+    case LEFT:
+        x--;
+        break;
+    case RIGHT:
+        x++;
+        break;
+    case UP:
+        y--;
+        break;
+    case DOWN:
+        y++;
+        break;
+    default:
+        break;
+    }
+    if (x > width || x < 0 || y > height || y < 0)
+        gameOver = true;
+    if (x == fruitX && y == fruitY)
+    {
+        score += 10;
+        fruitX = rand() % width;
+        fruitY = rand() % height;
+    }
+} 
 int main()
 {
     Setup();
